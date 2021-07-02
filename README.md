@@ -14,9 +14,45 @@ CREATE database koreadb;
     <artifactId>tomcat-jasper</artifactId>
     <version>9.0.46</version>
 </dependency>
+
+<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+<dependency>
+	<groupId>javax.servlet</groupId>
+	<artifactId>jstl</artifactId>
+	<version>1.2</version>
+</dependency>
 ```
 
-###teglib
-```jstl
+###JSTL teglib
+```jsp
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 ```
+
+### application.yml 
+```yml
+server:
+ port: 8000
+ servlet:
+    encoding:
+      charset: UTF-8
+      
+
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+      
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: korea
+    password: korea1234
+    url: jdbc:mysql://localhost:3306/koreadb      
+    
+    
+  jpa:
+    hibernate:
+      ddl-auto: none #create:, update, none
+    show-sql: true
+```
+
