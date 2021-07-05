@@ -68,3 +68,8 @@ INSERT INTO post(title, content, user_id)VALUES('제목3','내용3',1);
 INSERT INTO post(title, content, user_id)VALUES('제목4','내용4',2);
 INSERT INTO post(title, content, user_id)VALUES('제목5','내용5',2);
 ```
+
+###주소 API 승인키
+```
+https://www.juso.go.kr/addrlink/addrLinkUrl.do?confmKey=devU01TX0FVVEgyMDIxMDcwNTE3MjgyMzExMTM2MTE=&returnUrl=http://localhost:8000
+```

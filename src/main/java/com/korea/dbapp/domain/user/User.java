@@ -4,10 +4,14 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.Fetch;
+import org.springframework.context.annotation.Lazy;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.korea.dbapp.domain.post.Post;
@@ -28,9 +32,11 @@ public class User {
 	//유저한명이 여러개의 게시글을 쓸수 있다.
 	//그렇기때문에 폴인키를 만들어주지 않는다
 	//여기서 폴인키가 만들어지면 db원자성의 원칙이 깨질확률이 높기때문
-	@JsonIgnoreProperties({"user"})
+	
+	@JsonIgnoreProperties({"user"} )
 	//user만 json으로 파싱하지 말라는 어노테이션
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user" )
+	
 	//mappedBy 는 나는 폴인키의 주인이 아니고 user가 폴인키이다 라고 알려주는것
 	private List<Post>posts;
 	//이건 db스키마에 영향을 미치는것이 아니다.

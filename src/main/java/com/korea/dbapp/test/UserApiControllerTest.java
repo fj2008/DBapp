@@ -43,9 +43,11 @@ public class UserApiControllerTest {
 	//http://localhost:8000/user/2
 	@GetMapping("/test/user/{id}")
 	public User findById(@PathVariable int id) {
-		//Optional은 데이터가 null일때 null을 반환하는게 아니라 가상의 데이터라도 넣어서 처리하겠다것
-		return userRepository.findById(id).get();//.get은 무조건 있다라는뜻
-		
+//		User userEntity = userRepository.findById(id).get();
+//		System.out.println("1");
+//		userEntity.getPosts().get(1).getId();
+//		System.out.println("2");
+		return userRepository.findById(id).get();
 	}
 	
 	@GetMapping("/test/user/username/{username}")
