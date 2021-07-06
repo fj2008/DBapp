@@ -3,6 +3,7 @@ package com.korea.dbapp.web;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -82,4 +83,17 @@ public class UserController {
 		return "redirect:/";
 	}
 	
+	
+		@GetMapping("/juso")
+	public String jusoRequest() {
+		return "juso/jusoPopup";
+	}
+		
+		@PostMapping("/juso")
+		public String jusoResponse(String roadFullAddr, String inputYn, Model model) {
+			System.out.println("주소 : "+ roadFullAddr);
+			model.addAttribute("roadFullAddr",roadFullAddr);
+			model.addAttribute("inputYn",inputYn);
+			return   "juso/jusoPopup";
+		}
 }
