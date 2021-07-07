@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -96,4 +97,40 @@ public class UserController {
 			model.addAttribute("inputYn",inputYn);
 			return   "juso/jusoPopup";
 		}
+		
+		
+		@GetMapping("/user/updateForm")
+		public String updateForm() {
+			//1.인증과 권한을 검사해야함때.
+			//2.세션값을 사용하면됨.
+			
+			return"user/updateForm";
+		}
+		
+		@PostMapping("/user/{id}")//원래는 Put으로 해야한다. 나중에 자바스크립트로 Put요청하기!
+		//wehere절에 걸리는상황에서 위와같은 주소를사용한다
+		public String update(@PathVariable int id, String password, String address) {
+			// 공통관심사
+			User principal =(User)session.getAttribute("principal");
+			
+			
+				if(id == principal.getId() && principal !=null) {//인증권한 ok
+					User userEntity= userRepository.findById(id).get();
+					userEntity.setPassword(password);
+					userEntity.setAddress(address);
+					userRepository.save(userEntity);
+					session.setAttribute("principal", userEntity);
+					return "redirect:/";
+				}
+					return "redirect:/auth/loginForm";
+				
+			}
+			//위와같은 코드는 인증이나 권한이 필요한 모든 함수에서 꼭 체크돼야하는 사항이다.(공통관심사)
+			//목적을 이루기위해서 해야되는 부가적인 것들.
+			//그래서 나오는 스프링에서의 개념이 바로 AOP이다.
+			//쉽게말해서 컨트롤러마다 비서를 배치하는것이다.
+			//AOP공통관심사를 분리시키는것
+			
+		
+		
 }

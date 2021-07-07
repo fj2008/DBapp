@@ -2,6 +2,8 @@ package com.korea.dbapp.test;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,14 +22,17 @@ import lombok.Delegate;
 public class UserApiControllerTest {
 
 	private final UserRepository userRepository;
+	public UserApiControllerTest(UserRepository userRepository, HttpSession session) {
+		super();
+		this.userRepository = userRepository;
+		this.session = session;
+	}
 
+	private final HttpSession session;
 	
 	//의존성 주입
 	
-	public UserApiControllerTest(UserRepository userRepository) {
-		super();
-		this.userRepository = userRepository;
-	}
+
 	
 	@PostMapping("/test/user")
 	public String save(User user) {
@@ -61,10 +66,11 @@ public class UserApiControllerTest {
 		User userEntity = userRepository.mLogin(date.getUsername(),date.getPassword());
 		
 		
-		if(userEntity != null) {
-			return "login success";
-		}else {
+		if(userEntity == null) {
 			return "login fail";
+		}else {
+			
+			return "login sucsses";
 		}
 		
 	}
@@ -90,6 +96,14 @@ public class UserApiControllerTest {
 		
 		return"update ok";
 		
+	}
+	
+	@GetMapping("/user/{id}")
+	public String updateForm() {
+		//1.인증과 권한을 검사해야함때.
+		//2.세션값을 사용하면됨.
+		
+		return"user/updateForm";
 	}
 	
 	
