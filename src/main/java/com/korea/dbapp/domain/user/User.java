@@ -35,7 +35,7 @@ public class User {
 	
 	@JsonIgnoreProperties({"user"} )
 	//user만 json으로 파싱하지 말라는 어노테이션
-	@OneToMany(mappedBy = "user" )
+	@OneToMany(mappedBy = "user" , fetch = FetchType.EAGER)
 	
 	//mappedBy 는 나는 폴인키의 주인이 아니고 user가 폴인키이다 라고 알려주는것
 	private List<Post>posts;
