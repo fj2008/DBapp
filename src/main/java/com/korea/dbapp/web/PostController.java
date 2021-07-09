@@ -83,7 +83,7 @@ public class PostController {
 			
 		}else {
 			postrepository.save(post);
-			return "/";
+			return "/post/list";
 		}
 		
 		
