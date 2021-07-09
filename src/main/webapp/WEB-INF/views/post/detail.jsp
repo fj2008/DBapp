@@ -4,7 +4,7 @@
 
 <div class="container">
 	<c:if test="${sessionScope.principal.id ==postEntity.user.id}">
-		<a href="#" class="btn btn-warning">수정</a>
+		<a href="/post/${postEntity.id}/updateForm" class="btn btn-warning">수정</a>
 		<form action="/post/${postEntity.id}" method="post" style="display: inline-block">
 			<button id="btn-delete" class="btn btn-danger" type="submit">삭제</button>
 		</form>

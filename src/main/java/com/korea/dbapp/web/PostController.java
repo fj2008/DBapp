@@ -2,6 +2,7 @@ package com.korea.dbapp.web;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,37 +52,73 @@ public class PostController {
 		// user오브젝트로 만들기위해서 괄호로 묶는 문법이있다.
 
 		// 1-2 post의 user id찾기
-		Post post = postrepository.findById(id).get();//이런건 어떻게 처리하지?
+		Post post = postrepository.findById(id).get();// 이런건 어떻게 처리하지?
 		if (userId == post.getUser().getId()) {
 			postrepository.deleteById(id);
 			return Script.href("/");
 		} else {
 			return Script.back("삭제 실패");
+			
 		}
 
 	}
+
 	@GetMapping("/post/saveForm")
 	public String saveForm() {
-		//1.인증 체크
+		// 1.인증 체크
 
-		return"/post/saveForm";
+		return "/post/saveForm";
 	}
-	@PostMapping("/post/{id}")
-	public String savePost(@PathVariable int id, String title, String content){
-	
-		User user = (User)session.getAttribute("principal");
-		
-		if(user != null) {
-		Post postEntity = postrepository.findById(id).get();
-		postEntity.setTitle(title);
-		postEntity.setContent(content);
-		postEntity.setUser(user);
-		postrepository.save(postEntity);
-		
-		session.setAttribute("principal", postEntity);
-		return "";
+
+	@PostMapping("/post")
+	public String save(Post post) {
+
+		User principal = (User) session.getAttribute("principal");
+		post.setUser(principal);
+		// 이렇게 하면 로그인된 사용자의 세션에 값을 비교하는데
+		// jpa가 알아서 user오브젝트에 id를 가져와서 insert를 해준다
+		if(principal == null) {
+			
+			return"/auth/loginForm";
+			
+		}else {
+			postrepository.save(post);
+			return "/";
 		}
-		return"";
+		
+		
+	}
+	
+	@GetMapping("/post/{id}/updateForm")
+	public String update(@PathVariable int id, Model model) {
+		
+		User principal = (User) session.getAttribute("principal");
+		int loginId = principal.getId();
+		
+		Post postEntity= postrepository.findById(id).get();
+		int postOwnerId = postEntity.getUser().getId();
+		
+		if(loginId == postOwnerId) {
+				model.addAttribute("postEntity",postEntity);
+				
+				return"post/updateForm";
+		}else {
+			return"/auth/loginForm";
+		}
+	}
+
+	@PostMapping("/post/{id}/update")
+	public String updateSave(@PathVariable int id ,Post post) {
+		
+
+		Post postEntity = postrepository.findById(id).get();
+		
+			postEntity.setTitle(post.getTitle());
+			postEntity.setContent(post.getContent());
+			postrepository.save(postEntity);
+			return "redirect:/post/"+id;
+		
+		
 	}
 	
 }
