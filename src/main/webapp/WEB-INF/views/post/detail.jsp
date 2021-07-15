@@ -5,8 +5,8 @@
 <div class="container">
 	<c:if test="${sessionScope.principal.id ==postEntity.user.id}">
 		<a href="/post/${postEntity.id}/updateForm" class="btn btn-warning">수정</a>
-		<form action="/post/${postEntity.id}" method="post" style="display: inline-block">
-			<button id="btn-delete" class="btn btn-danger" type="submit">삭제</button>
+		<form action="/post/${postEntity.id}" onclick="deleteById()" style="display: inline-block">
+			<button id="btn-delete"  class="btn btn-danger" type="submit">삭제</button>
 		</form>
 	</c:if>
 	<br /> 
@@ -52,6 +52,26 @@
 	</div>
 	<br />
 </div>
+<script>
+	async function deleteById(){
+		
+		event.preventDefault();//페이지가 새로고침이 되는것을 방지하는 함수
+		
+		let response = await fetch("/post/${postEntity.id}",{
+			method:"delete"
+		});
+		
+		let parseResponse =await response.text();//json()or text()
+		//통신으로 받은데이터가 json이 아닌 문자열이라는뜻.
+		console.log(parseResponse);
+		
+		if(parseResponse ==="ok"){
+			location.href="/";// location는 화면전환을 해주는 객체
+		}else{
+			alert("삭제실패");
+		}
+	}
 
+</script>
 <%@ include file="../layout/footer.jsp"%>
 ​

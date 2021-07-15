@@ -5,15 +5,20 @@ import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.korea.dbapp.domain.post.Post;
 import com.korea.dbapp.domain.post.PostRepository;
 import com.korea.dbapp.domain.user.User;
 import com.korea.dbapp.util.Script;
+
+import lombok.Delegate;
 
 @Controller
 public class PostController {
@@ -42,8 +47,8 @@ public class PostController {
 		return "post/detail";
 	}
 
-	@PostMapping("/post/{id}")
-	public @ResponseBody String deleteById(@PathVariable int id, Model model) {
+	@DeleteMapping("/post/{id}")
+	public @ResponseBody String deleteById(@PathVariable int id) {
 		// 1. 권한 체크(post id를 통해 user id를 찾아서 session의 user id를 비교)
 		// 2. {id}값으로 삭제
 
@@ -55,9 +60,9 @@ public class PostController {
 		Post post = postrepository.findById(id).get();// 이런건 어떻게 처리하지?
 		if (userId == post.getUser().getId()) {
 			postrepository.deleteById(id);
-			return Script.href("/");
+			return "ok";
 		} else {
-			return Script.back("삭제 실패");
+			return "fail";
 			
 		}
 
@@ -107,8 +112,8 @@ public class PostController {
 		}
 	}
 
-	@PostMapping("/post/{id}/update")
-	public String updateSave(@PathVariable int id ,Post post) {
+	@PutMapping("/post/{id}")
+	public @ResponseBody String updateSave(@PathVariable int id ,@RequestBody Post post) {
 		
 
 		Post postEntity = postrepository.findById(id).get();
@@ -116,7 +121,7 @@ public class PostController {
 			postEntity.setTitle(post.getTitle());
 			postEntity.setContent(post.getContent());
 			postrepository.save(postEntity);
-			return "redirect:/post/"+id;
+			return "ok";
 		
 		
 	}
