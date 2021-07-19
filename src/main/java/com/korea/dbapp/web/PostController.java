@@ -1,8 +1,9 @@
 package com.korea.dbapp.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,23 +14,26 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.korea.dbapp.domain.comment.Comment;
+import com.korea.dbapp.domain.comment.CommentRepository;
 import com.korea.dbapp.domain.post.Post;
 import com.korea.dbapp.domain.post.PostRepository;
 import com.korea.dbapp.domain.user.User;
-import com.korea.dbapp.util.Script;
 
-import lombok.Delegate;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+//lombok의 어노테이션
+//final필드가 붙어있는 것들은 알아서 다 di(의존성주입)을 해주는것이다.
+//di를 받고싶지 않다면 final을 안붙이면 되는것이다.
 
 @Controller
 public class PostController {
 
 	private final PostRepository postrepository;
 	private final HttpSession session;
+	private final CommentRepository commentRepository;
 
-	public PostController(PostRepository postrepository, HttpSession session) {
-		this.postrepository = postrepository;
-		this.session = session;
-	}
 
 	@GetMapping({ "/", "/post" })
 	public String list(Model model) {// model = request
@@ -42,8 +46,12 @@ public class PostController {
 	public String detail(@PathVariable int id, Model model) {
 
 		Post postEntity = postrepository.findById(id).get();
+		
 		model.addAttribute("postEntity", postEntity);
 
+		List<Comment> commentsEntity = commentRepository.mfindAllByPostId(id);
+		model.addAttribute("commentsEntity",commentsEntity);
+		
 		return "post/detail";
 	}
 

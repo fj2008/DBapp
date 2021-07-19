@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.korea.dbapp.domain.comment.Comment;
 import com.korea.dbapp.domain.post.Post;
 import com.korea.dbapp.domain.post.PostRepository;
 
@@ -29,7 +30,7 @@ public class PostApiControllerTest {
 	public String findById(@PathVariable int id) {
 				
 		Post post =  postRepository.findById(id).get();
-		
+
 		return "ok";
 	}
 }
