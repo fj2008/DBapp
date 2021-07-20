@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.korea.dbapp.domain.post.Post;
 import com.korea.dbapp.domain.user.User;
 
@@ -30,13 +31,14 @@ public class Comment {
 	//한명의 유저는 여러개의 댓글을 작성할수 있다
 	//하나의 댓글은 여려명의 유저가 작성할 수 없다
 	//유저가 1 코멘트가 N
+	@JsonIgnoreProperties({"posts"})//comment에서 참조할때 무한참조되기때문에 파싱하지마!!
 	@JoinColumn(name = "user_id")//폴인키를 user_id로 만들도록 한다.
 	@ManyToOne
 	private User user;
 	//하나의 게시글은 여려개의 댓글을 가질수 있다
 	//하나의 댓글은 여려개의 포스트를 만들어낼수 있다? 말이안된다
 	//그렇기때문에 게시글이 1 댓글이 N
-	
+	@JsonIgnoreProperties({"user"})//comment에서 참조할때 무한참조되기때문에 파싱하지마!!
 	@JoinColumn(name = "post_id")//폴인키를 post_id로 만들도록 한다.
 	@ManyToOne
 	private Post post;
