@@ -23,4 +23,6 @@ spring:
       ddl-auto: none #create:, update, none
     show-sql: true
     
-
+  output:
+    ansi:
+      enabled: always

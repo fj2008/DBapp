@@ -73,3 +73,12 @@ INSERT INTO post(title, content, user_id)VALUES('제목5','내용5',2);
 ```
 https://www.juso.go.kr/addrlink/addrLinkUrl.do?confmKey=devU01TX0FVVEgyMDIxMDcwNTE3MjgyMzExMTM2MTE=&returnUrl=http://localhost:8000
 ```
+
+
+###터미널 알록달록
+```
+spring:
+  output:
+    ansi:
+      enabled: always
+```
